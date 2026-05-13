@@ -33,7 +33,7 @@ const EXPERIENCES = [
     type: "Alternance",
     color: "indigo",
     description:
-      "Pilotage de la refonte de l'intranet en méthodologie Agile Scrum, de l'analyse des besoins à la mise en production. Conception des maquettes UX/UI, rédaction des spécifications techniques et gestion des vulnérabilités.",
+      "Pilotage de la refonte de l'intranet en méthodologie Agile Scrum, de l'analyse des besoins à la mise en production. Conception des maquettes UX/UI, rédaction des spécifications techniques, tests et déploiement.",
     tags: ["Agile Scrum", "Symfony", "UX/UI", "GitLab CI/CD", "Sécurité SI"],
   },
   {
@@ -62,11 +62,12 @@ const PROJECTS = [
   {
     title: "Refonte de l'intranet – FFS",
     description:
-      "Pilotage en Agile Scrum de la refonte complète de l'intranet Symfony de la FFS. Coordination d'équipe, conception UX/UI, développement back-end, CI/CD et gestion des vulnérabilités.",
+      "Pilotage en Agile Scrum de la refonte de l'intranet Symfony de la FFS. Coordination d'équipe, conception UX/UI et CI/CD.",
     tech: ["Symfony", "PHP", "Agile Scrum", "GitLab CI/CD"],
     accent: "indigo",
     github: null,
     demo: null,
+    image: null,
   },
   {
     title: "Outil de planification – FFS",
@@ -76,6 +77,7 @@ const PROJECTS = [
     accent: "emerald",
     github: null,
     demo: null,
+    image: null,
   },
   {
     title: "Portfolio Personnel",
@@ -85,6 +87,18 @@ const PROJECTS = [
     accent: "violet",
     github: null,
     demo: null,
+    image: null,
+  },
+  {
+    title: "AeroF1",
+    description:
+      "Application iOS publiée sur l'App Store, dédiée à la Formule 1. Développée nativement en Swift et SwiftUI, de la conception à la publication.",
+    tech: ["Swift", "SwiftUI", "iOS"],
+    accent: "orange",
+    github: null,
+    demo: null,
+    appstore: "https://apps.apple.com/us/app/aerof1/id6757757888",
+    noHeader: false,
   },
 ]
 
@@ -301,7 +315,7 @@ function Hero() {
 
 function ExperienceItem({ title, company, period, type, color, description, tags, delay = 0, isLast }) {
   return (
-    <div className="exp-item" data-reveal style={{ transitionDelay: `${delay}s` }}>
+    <div className="exp-item" data-reveal style={{ '--reveal-delay': `${delay}s` }}>
       <div className="exp-marker">
         <span className={`exp-dot exp-dot--${color}`} />
         {!isLast && <span className="exp-line" />}
@@ -328,7 +342,7 @@ function ExperienceItem({ title, company, period, type, color, description, tags
 
 function FormationItem({ title, subtitle, school, period, color, delay = 0, isLast }) {
   return (
-    <div className="exp-item" data-reveal style={{ transitionDelay: `${delay}s` }}>
+    <div className="exp-item" data-reveal style={{ '--reveal-delay': `${delay}s` }}>
       <div className="exp-marker">
         <span className={`exp-dot exp-dot--${color}`} />
         {!isLast && <span className="exp-line" />}
@@ -384,22 +398,25 @@ function Parcours() {
   )
 }
 
-function ProjectCard({ title, description, tech, accent, github, demo, delay = 0 }) {
+function ProjectCard({ title, description, tech, accent, github, demo, appstore, noHeader, delay = 0 }) {
   const hasRealGithub = github && github !== '#'
   const hasRealDemo = demo && demo !== '#'
+  const hasAppStore = appstore && appstore !== '#'
 
   return (
     <article
       className={`project-card project-card--${accent}`}
       data-reveal
-      style={{ transitionDelay: `${delay}s` }}
+      style={{ '--reveal-delay': `${delay}s` }}
     >
-      <div className="project-card-header">
-        <div className="card-dots">
-          <span /><span /><span />
+      {!noHeader && (
+        <div className="project-card-header">
+          <div className="card-dots">
+            <span /><span /><span />
+          </div>
+          <span className="card-tech-tag">{tech[0]}</span>
         </div>
-        <span className="card-tech-tag">{tech[0]}</span>
-      </div>
+      )}
       <div className="project-card-body">
         <h3 className="project-title">{title}</h3>
         <p className="project-desc">{description}</p>
@@ -413,7 +430,10 @@ function ProjectCard({ title, description, tech, accent, github, demo, delay = 0
           {hasRealDemo && (
             <a href={demo} target="_blank" rel="noreferrer" className="project-link">Démo ↗</a>
           )}
-          {!hasRealGithub && !hasRealDemo && (
+          {hasAppStore && (
+            <a href={appstore} target="_blank" rel="noreferrer" className="project-link">App Store ↗</a>
+          )}
+          {!hasRealGithub && !hasRealDemo && !hasAppStore && (
             <span className="project-link-soon">Projet interne</span>
           )}
         </div>
@@ -445,7 +465,7 @@ function SkillGroup({ label, color, skills, delay = 0 }) {
     <div
       className={`skill-group skill-group--${color}`}
       data-reveal
-      style={{ transitionDelay: `${delay}s` }}
+      style={{ '--reveal-delay': `${delay}s` }}
     >
       <div className="skill-group-header">
         <span className="skill-group-dot" aria-hidden="true" />
